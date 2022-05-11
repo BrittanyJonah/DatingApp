@@ -24,7 +24,6 @@ namespace API
         public Startup(IConfiguration config)
         {
             _config = config;
-            
         }
 
 
@@ -44,6 +43,7 @@ namespace API
                 options.UseSqlite(_config.GetConnectionString("DefaultConnection")); // connection string gets added to config files
             });
             services.AddControllers();
+            services.AddCors();
 
             services.AddSwaggerGen(c =>
             {
@@ -52,6 +52,7 @@ namespace API
         }
         
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        // order is very important within configure method
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -64,6 +65,9 @@ namespace API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            
+            // rule for cors is it must be between app.UseRouting and app.UseEndpoints. Also before Auth.
+            app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
 
             app.UseAuthorization();
 
