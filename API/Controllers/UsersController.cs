@@ -4,14 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Data;
 using API.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class UsersController : ControllerBase
+    public class UsersController : BaseApiController
     {
         private readonly DataContext _context;
         public UsersController(DataContext context)
@@ -21,6 +20,7 @@ namespace API.Controllers
 
         // endpoint
         [HttpGet]
+        [AllowAnonymous]
         // IEnumerable allows for simple iteration of items of a specified type. L
         // List does the same thing but offers way more features like sort etc
         public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
@@ -31,6 +31,7 @@ namespace API.Controllers
 
         // specifying a root param, when hit this endpoint
         // api/users/3 gets user with id of 3
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<AppUser>> GetUser(int id)
         {

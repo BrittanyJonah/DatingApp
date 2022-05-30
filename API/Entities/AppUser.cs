@@ -12,6 +12,9 @@ namespace API.Entities
         // private, prop is only accessible from within this class.
 
         public int Id { get; set; } // primary key, auto increments in DB
+        // very important to use capital N
         public string UserName { get; set; } // asp.net Identity uses 'UserName' (with uppercase n)
+        public byte[] PasswordHash { get; set; }
+        public byte[] PasswordSalt { get; set; }
     }
 }
