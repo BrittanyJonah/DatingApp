@@ -15,7 +15,7 @@ export class AccountService {
   baseUrl = 'https://localhost:5001/api/';
   // replay subject is a buffer. Stores values inside so Anytime a subscriber subscribes to this observable,
   // will emmit the last value that was inside it, or however many we want
-  private currentUserSource = new ReplaySubject<User>(1);
+  private currentUserSource = new ReplaySubject<User>(1); // our guard subscribes to this
   currentUser$ = this.currentUserSource.asObservable();
 
   constructor(private http: HttpClient) { }
