@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { User } from './_models/user';
+import { AccountService } from './_services/account.service';
 
 // decorator: gives a normal class extra powers
 @Component({
@@ -16,10 +18,18 @@ export class AppComponent implements OnInit{
   // dependency injection in angular:
   // note: http requests are naturally async
   // angular comes with lifecycle events. the lifecycle event that takes place after creation of constructor is called the initialization
-  constructor(private http: HttpClient) {}
+  constructor(private accountService: AccountService) {}
 
   ngOnInit() {
-    this.getUsers();
+    this.setCurrentUser();
+  }
+
+  setCurrentUser(){
+    // because used JSON.stringify to turn to a string, we user .parse to get it out
+    // get user from local storage
+    const user: User = JSON.parse(localStorage.getItem('user'));
+    // set that user as current user
+    this.accountService.setCurrentUser(user);
   }
 
   // depricated way of using subscribe method
@@ -30,13 +40,4 @@ export class AppComponent implements OnInit{
   //     console.log(error);
   //   })
   // }
-
-  //observer pattern way of using subscribe which is non-deprecated
-  getUsers() {
-    this.http.get('https://localhost:5001/api/users').subscribe({
-      next: response => this.users = response,
-      error: error => console.log(error)
-    })
-  }
-
 }
